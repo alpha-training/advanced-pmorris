@@ -6,9 +6,9 @@ l:{[p]
     f:read0 p;
     fheads:f[where raze (-1#'f in ":")&not 1#'f in " "];
     heads:HEADERS,\:":";
-    if[not all heads in fheads; 
-        -1"invalid header: ",/:fheads except heads;
-        :()];
+    if[not all heads in fheads;
+        bad:fheads except heads;
+        '"invalid header(s): "," " sv bad]
     lines:-1_'(where f in heads)_f;
     processSection each lines;
  }
