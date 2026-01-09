@@ -3,8 +3,13 @@ HEADERS:string`vars`state`indicators`enter`signal_exit`stop_loss`take_profit`tim
 
 / entry function
 l:{[p]
-	f:read0 p;
-    lines:-1_'(where f in HEADERS,\:":")_f;
+    f:read0 p;
+    fheads:f[where raze (-1#'f in ":")&not 1#'f in " "];
+    heads:HEADERS,\:":";
+    if[not all heads in fheads; 
+        -1"invalid header: ",/:fheads except heads;
+        :()];
+    lines:-1_'(where f in heads)_f;
     processSection each lines;
  }
 
