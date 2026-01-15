@@ -25,7 +25,3 @@ parsef:{[p]
     if[0<>count badExErr;'"Badly formed expression: ",first badExErr];
     -1 printout;
     }
-
-p:`:translator1/test1.qs
-p2:`:translator1/test2.qs
-p3:`:translator1/test3.qs
