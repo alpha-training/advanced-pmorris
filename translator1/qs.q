@@ -15,9 +15,11 @@ parsef:{[p]
     funcs:string 1_key func;
     vrs:raze m[;0];
 	txt2:{$[first (x like "*",(y),"*")&not x like "*[A-z|.]",(y),"*";x:ssr[x;y;"func.",y];x]}/[;funcs]each txt;
-    {$[x like "*func.",(y),"[[]*";
-        $[(sum x in ";")<>-1+count (get func`$y)[1];
-            '"Too many arguments provided: ",x;x];x]}/[;funcs]each txt2;
+    t:([] txt2:txt2);
+    t:t^flip (`$funcs)!{(x like "*func.",(y),"[[ ]*")*-1+count (get func`$y)[1]}[txt2;]each funcs;
+    t:update semis:sum each txt2 in ";" from t;
+    t:update err:(add+add3)<>semis from t;
+    if[0<>count select from t where err;'"Badly formed expression: ",first [select from t where err]`txt2];
     printout:(string vrs),'(":",/:txt2);
     badExErr:printout where (sum each printout in "[]") mod 2;
     if[0<>count badExErr;'"Badly formed expression: ",first badExErr];
