@@ -1,8 +1,9 @@
 copy:read0[`:qi.copy.json]
 
 formatj:{[indent;flat]
-    p:ssr[flat; ","; ",\n "];
-    p:ssr[p; "{"; " {\n "];
+    p:ssr[flat; "\":"; "\": "];
+    p:ssr[p; ","; ",\n "];
+    p:ssr[p; "{"; "{\n "];
     p:ssr[p; "}"; "\n}"];
     p:"[\n " sv "[" vs p;
     p:"\n]" sv "]" vs p;
