@@ -3,7 +3,7 @@
 func.add:{x+y}
 func.add3:{x+y+z}
 
-parsef:{[p]
+parsefx:{[p]
     f:l where not (fir in " /")|null fir:first each l:read0 p;
     replace:{x:ssr[x;",";";"];
         x:ssr[x;"(";"["];
@@ -17,10 +17,21 @@ parsef:{[p]
     t:([] txt2:txt2);
     t:t^flip (`$funcs)!{(-1+count (get func`$y)1)*x like "*func.",(y),"[[ ]*"}[txt2;]each funcs;
     t:update semis:sum each txt2 in ";" from t;
-    t:update err:semis<>add+add3 from t;
+    t:update err:semis<>sum(t[(cols t)except`txt2`semis]) from t;
     if[0<>count select from t where err;'"Badly formed expression: ",first [select from t where err]`txt2];
     printout:(string vrs),'(":",/:txt2);
     badExErr:printout where mod[sum each printout in "[]";2];
     if[0<>count badExErr;'"Badly formed expression: ",first badExErr];
-    -1 printout;
+    -1 printout
+    }
+
+p:`:translator1/test1.qs
+p2:`:translator1/test2.qs
+p3:`:translator1/test3.qs
+
+parsef:{[p]
+    lines@:where (first each lines<>"/")&0<count each lines:read0 p;
+    if[count badEx:lines where mod[sum each lines in "()";2];'"Badly formed expression: ",first badEx];
+    t:([] raw:lines;eq:{x?"="}each lines);
+    t:update lhs:trim eq#'raw,rhs:trim(1+eq)_'raw from t;dbg
     }
